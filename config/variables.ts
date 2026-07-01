@@ -1,4 +1,10 @@
-process.loadEnvFile();
+// Load .env file into process.env (Playwright VSCode extension needs it)
+// In CI, env vars come from GitHub Secrets, so .env doesn't exist - hence try/catch
+try {
+  process.loadEnvFile();
+} catch {
+  // .env file doesn't exist (expected in CI environments)
+}
 
 const {
   DOJO_USER_MEMBER_EMAIL,
