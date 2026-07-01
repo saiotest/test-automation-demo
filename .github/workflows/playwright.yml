@@ -1,23 +1,42 @@
 name: Playwright Tests
 
 on:
-  push:
-    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Select the Test Environment
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+      user-role:
+        description: Select the User Role
+        required: true
+        default: "member"
+        type: choice
+        options:
+          - member
+          - admin
+
   pull_request:
-    branches: [main, master]
+    branches: [main]
 
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    environment: staging
+    environment:
+      name: ${{ github.event.inputs.environment || 'staging' }}
     env:
       DOJO_USER_MEMBER_EMAIL: ${{ secrets.DOJO_USER_MEMBER_EMAIL }}
       DOJO_USER_MEMBER_PASSWORD: ${{ secrets.DOJO_USER_MEMBER_PASSWORD }}
       DOJO_USER_ADMIN_EMAIL: ${{ secrets.DOJO_USER_ADMIN_EMAIL }}
       DOJO_USER_ADMIN_PASSWORD: ${{ secrets.DOJO_USER_ADMIN_PASSWORD }}
-      TEST_ENV: staging
-      USER_ROLE: member
+      TEST_ENV: ${{ github.event.inputs.environment || 'staging' }}
+      USER_ROLE: ${{ github.event.inputs.user-role || 'member' }}
 
     steps:
       - name: Clone Repo
