@@ -10,8 +10,17 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    environment: staging
+    env:
+      DOJO_USER_MEMBER_EMAIL: ${{ secrets.DOJO_USER_MEMBER_EMAIL }}
+      DOJO_USER_MEMBER_PASSWORD: ${{ secrets.DOJO_USER_MEMBER_PASSWORD }}
+      DOJO_USER_ADMIN_EMAIL: ${{ secrets.DOJO_USER_ADMIN_EMAIL }}
+      DOJO_USER_ADMIN_PASSWORD: ${{ secrets.DOJO_USER_ADMIN_PASSWORD }}
+      TEST_ENV: staging
+      USER_ROLE: member
+
     steps:
-      - name: CLonar Repo
+      - name: Clone Repo
         uses: actions/checkout@v4
 
       - name: Setup Bun
